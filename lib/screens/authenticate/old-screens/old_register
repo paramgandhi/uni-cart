@@ -1,0 +1,144 @@
+import 'package:flutter/material.dart';
+import 'package:uni_cart/services/auth.dart';
+import 'package:uni_cart/shared/constants.dart';
+import 'package:uni_cart/shared/loading.dart';
+
+
+class Register extends StatefulWidget {
+
+  final Function toggleView;
+  Register({this.toggleView});
+  @override
+  _RegisterState createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  bool loading = false;
+  // Text Field States
+
+  String email = '';
+  String password = '';
+  String error = '';
+  String name = '';
+  String number = '';
+  String address = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return loading ? Loading() : Scaffold(
+      backgroundColor: Colors.deepOrange[50],
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Colors.deepOrangeAccent[400],
+        elevation: 2.0,
+        title: Text('Sign Up to UniCart'),
+        actions: <Widget>[
+          FlatButton.icon(
+            onPressed: () => widget.toggleView(),
+            icon: Icon(Icons.person),
+            label: Text('Sign In'))
+        ],
+      ),
+      
+      body: Container(
+        padding: EdgeInsets.symmetric(vertical:20, horizontal:50.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              
+              SizedBox(height: 20), // Spacing
+
+              // Field For Name
+              TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Name'),
+                validator: (val) => val.isEmpty ? 'Marc Devlin' : null,
+                onChanged: (val){
+                  setState(()=> name = val);
+                },
+              ),
+
+              SizedBox(height: 10),
+
+              // Field For Number
+              TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Phone Number'),
+                validator: (val) => val.isEmpty ? '982111111' : null,
+                onChanged: (val){
+                  setState(()=> number = val);
+                },
+              ),
+
+              SizedBox(height: 10),
+              
+              // Field For Flat Number
+              TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Flat Number'),
+                validator: (val) => val.isEmpty ? 'C-901' : null,
+                onChanged: (val){
+                  setState(()=> address = val);
+                },
+              ),
+
+              SizedBox(height: 10),
+
+              // Field For Username
+              TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Email'),
+                validator: (val) => val.isEmpty ? 'name@example.com' : null,
+                onChanged: (val){
+                  setState(()=> email = val);
+                },
+              ),
+              
+              SizedBox(height: 10), // Spacing
+             
+              // Field For Password
+              TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Password'),
+                obscureText: true,
+                validator: (val) => val.length < 6 ? 'Enter a Password atleast 6 characters long' : null,
+                onChanged: (val) {
+                  setState(() => password = val);
+                }
+                ),
+              
+              SizedBox(height: 15),
+              
+              // Submit Button
+              RaisedButton(
+                color: Colors.pinkAccent[400],
+                child: Text('Register', style: TextStyle(color: Colors.white)),
+                onPressed: () async {
+                  // Validates if email, password are entered correctly
+                  if(_formKey.currentState.validate()){
+                    setState(() => loading = true);
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password, name, number, address);
+                    if(result == null){
+                      setState(() {
+                        error = 'Please provide a valid email';
+                        loading = false;
+                      });
+                    }
+                  }
+                },
+              ),
+              
+              SizedBox(height: 15),
+              
+              // Display relevant error messages
+              Text(
+                error, style: TextStyle(color: Colors.red,fontSize: 14.0),
+              )
+
+            ],
+            )
+          ),
+      ),
+      // Redirect to User Form
+      );
+  }
+}

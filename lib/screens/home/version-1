@@ -1,0 +1,197 @@
+import 'package:flutter/material.dart';
+import 'package:uni_cart/models/item.dart';
+
+class ItemTile extends StatelessWidget {
+
+  final Item item;
+  ItemTile({ this.item });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+    padding: EdgeInsets.only(top: 15.0, bottom: 5.0, left: 5.0, right: 5.0),
+    child: InkWell(
+      onTap: () { print('Tapped');},
+      child: Container(
+        height: 120.0,
+        width: 120.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 5.0, spreadRadius: 3.0)],
+          color: Colors.white,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Stack(
+              alignment: AlignmentDirectional.topEnd,
+              children: <Widget>[
+                Hero(
+                  tag: 'assets/images/logo5.png',
+                  child: Container(
+                    height: 90,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(image: AssetImage('assets/images/logo5.png'), fit: BoxFit.cover)
+                    ),
+                  ),
+                ),
+                Icon(Icons.favorite_border, color: Colors.red),
+              ],
+              overflow: Overflow.clip,
+            ),
+            SizedBox(height: 7.0),
+            Padding(
+              padding: EdgeInsets.only(left:8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    item.name,
+                    maxLines: 1, 
+                    overflow: TextOverflow.ellipsis, 
+                    style: TextStyle(fontSize: 16.0, color: Colors.black)
+                  ),
+                  SizedBox(height: 5.0),
+                  Text( 
+                    'By ${item.author}', 
+                    maxLines: 2, 
+                    overflow: TextOverflow.ellipsis, 
+                    style: TextStyle(fontSize: 14.0, color: Colors.grey)
+                  ),
+                  SizedBox(height: 5.0),
+                  Text( 
+                    '\$28',
+                    maxLines: 1, 
+                    overflow: TextOverflow.ellipsis, 
+                    style: TextStyle(fontSize: 12.0, color: Colors.orange)
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+  }
+}
+
+
+//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uni_cart/models/user.dart';
+import 'package:uni_cart/shared/constants.dart';
+
+class AddItem extends StatefulWidget {
+  @override
+  _AddItemState createState() => _AddItemState();
+}
+
+class _AddItemState extends State<AddItem> {
+
+  final _formKey = GlobalKey<FormState>();
+
+  String name;
+  DateTime _dateTime;
+  TimeOfDay _time;
+  String notes;
+
+  @override
+  Widget build(BuildContext context) {
+
+    final user = Provider.of<User>(context);
+
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.fromLTRB(25, 25, 25, 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Uni Cart',
+                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.black)
+                ),
+                
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.person, color: Colors.black),
+                      onPressed: () {},
+                      iconSize: 30.0,
+                    ),
+                    Text('My Profile')
+                  ],
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Add item to sell: ',
+                  style: TextStyle(fontSize: 30.0, color: Colors.green, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 15.0)
+              ],
+            ),
+          ),
+          SizedBox(height: 10.0),
+          
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  //Text('data 2'),
+                  Row(
+                    //textDirection: TextDirection.rtl,
+                    children: <Widget>[
+                      Text('Enter item name: '),
+                      TextFormField(
+                        decoration: textInputDecoration.copyWith(hintText: 'Name'),
+                        validator: (val) => val.isEmpty ? 'Marc Devlin' : null,
+                        onChanged: (val) {
+                           setState(() => name = val);
+                        },
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Text('Pick the last date to order: '),
+                  //     RaisedButton(
+                  //       child: Text('Pick date'),
+                  //       onPressed: () {
+                  //         showDatePicker(
+                  //           context: context, 
+                  //           initialDate: DateTime.now(), 
+                  //           firstDate: DateTime.now(), lastDate: DateTime(2021)
+                  //           ).then((date) => _dateTime = date);
+                  //       },
+                  //     )
+                  //   ],
+                  // )
+                ],
+              ),
+            ),
+          ),
+          
+          SizedBox(height: 15.0),
+        ],
+      ),
+    );
+  }
+}

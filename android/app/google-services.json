@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "335844172475",
+    "firebase_url": "https://unicart-909bc.firebaseio.com",
+    "project_id": "unicart-909bc",
+    "storage_bucket": "unicart-909bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335844172475:android:8a8b3663fc5387b14ebf9e",
+        "android_client_info": {
+          "package_name": "com.pgandhi.uni_cart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "335844172475-nij5cqglulrj86u9r2qgba1lj2apjd8j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfkZOVduWK8pR1XCWl7zyIbA2-PzJWZnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "335844172475-nij5cqglulrj86u9r2qgba1lj2apjd8j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

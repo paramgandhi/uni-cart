@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uni_cart/models/user.dart';
+import 'package:uni_cart/shared/constants.dart';
+import 'package:uni_cart/services/database.dart';
+
+class AddItemForm extends StatefulWidget {
+  @override
+  _AddItemFormState createState() => _AddItemFormState();
+}
+
+class _AddItemFormState extends State<AddItemForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  String name;
+  DateTime _dateTime;
+  String notes;
+
+  @override
+  Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.orangeAccent,
+        title: Text('Add new Item'),
+      ),
+      body: Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50.0),
+          child: Form(
+            key: _formKey,
+            child: Column(children: <Widget>[
+              SizedBox(height: 20), // Spacing
+
+              // Field For Name
+              TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Name'),
+                validator: (val) => val.isEmpty ? 'Marc Devlin' : null,
+                onChanged: (val) {
+                  setState(() => name = val);
+                },
+              ),
+
+              SizedBox(height: 20),
+
+              Text(_dateTime == null
+                  ? 'Date has not been picked yet'
+                  : _dateTime.toString()),
+
+              SizedBox(height: 20),
+
+              // Submit Button -> add new item to database
+              RaisedButton(
+                color: Colors.pinkAccent[400],
+                child: Text('Submit', style: TextStyle(color: Colors.white)),
+                onPressed: () async {
+                  try {
+                    // Validates if email, password are entered correctly
+                    if (_formKey.currentState.validate()) {
+                      await DatabaseService(uid: user.uid).addItemToList(name);
+                      Navigator.pop(context);
+                    }
+                  } catch (e) {
+                    print(e.toString());
+                    return null;
+                  }
+                },
+              ),
+            ]),
+          ),
+          ),
+    );
+  }
+}
